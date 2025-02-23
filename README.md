@@ -5,4 +5,4 @@
 Sample for converting image formats on Node.js.  
 Single-threaded and multi-threaded operation can be selected.
 
-[node-image-convert](./node-image-convert)
+[node-image-convert](/wasm-image-optimization-samples/tree/master/node-image-convert)
