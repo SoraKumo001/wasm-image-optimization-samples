@@ -1,0 +1,13 @@
+{
+  "name": "deno-ogp-image",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "SoraKumo <info@croud.jp>",
+  "jsx": "react",
+  "license": "MIT",
+  "scripts": {
+    "dev": "deno run --watch --allow-all src/index.tsx",
+    "deploy": "npx next-exec -- deployctl deploy --project deno-ogp --build --include=./src --prod"
+  },
+  "repository": "https://github.com/SoraKumo001/deno-ogp-image"
+}

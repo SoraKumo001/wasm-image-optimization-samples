@@ -1,5 +1,29 @@
 # wasm-image-optimization-samples
 
+## cloudflare-ogp
+
+Sample for generating OGP images on Cloudflare Workers.
+
+[cloudflare-ogp](./cloudflare-ogp/)
+
+## deno-ogp
+
+Sample for generating OGP images on Deno.
+
+[deno-ogp](./deno-ogp/)
+
+## cloudflare-image-optimization
+
+Sample for image optimization on Cloudflare Workers.
+
+[cloudflare-image-optimization](./cloudflare-image-optimization/)
+
+## deno-image-optimization
+
+Sample for image optimization on Deno.
+
+[deno-image-optimization](./deno-image-optimization/)
+
 ## node-image-convert
 
 Sample for converting image formats on Node.js.  
