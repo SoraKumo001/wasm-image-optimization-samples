@@ -168,7 +168,7 @@ const Page = () => {
       <div>
         <a
           className="text-blue-600 hover:underline"
-          href="https://github.com/SoraKumo001/wasm-image-optimization-samples/tree/master/next-image-convert"
+          href="https://github.com/SoraKumo001/wasm-image-optimization-samples/tree/master/react-router-image-convert"
         >
           Source code
         </a>
