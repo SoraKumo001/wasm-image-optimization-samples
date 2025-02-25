@@ -46,7 +46,7 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
           refInput.current?.click();
         }}
         onClick={() => {
-          refInput.current.focus();
+          refInput.current?.focus();
         }}
         onDrop={(e) => {
           onFiles(Array.from(e.dataTransfer.files));
@@ -69,7 +69,7 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
         }}
         onChange={(e) => {
           e.preventDefault();
-          onFiles(Array.from(e.currentTarget.files));
+          if (e.currentTarget.files) onFiles(Array.from(e.currentTarget.files));
         }}
       />
     </>
