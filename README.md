@@ -31,6 +31,13 @@ Run with Web Worker and WebAssembly.
 
 [next-image-convert](./next-image-convert/)
 
+## react-router-image-convert
+
+Sample for converting image formats on React Router.
+Run with Web Worker and WebAssembly.
+
+[react-router-image-convert](./react-router-image-convert/)
+
 ## node-image-convert
 
 Sample for converting image formats on Node.js.  

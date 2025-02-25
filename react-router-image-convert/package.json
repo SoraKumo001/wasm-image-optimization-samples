@@ -1,0 +1,34 @@
+{
+  "name": "react-router-image-convert",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "react-router build",
+    "deploy": "npm run build && wrangler deploy",
+    "dev": "react-router dev",
+    "start": "wrangler dev",
+    "typecheck": "react-router typegen && tsc -b"
+  },
+  "dependencies": {
+    "@react-router/node": "^7.2.0",
+    "@react-router/serve": "^7.2.0",
+    "isbot": "^5.1.23",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.2.0",
+    "wasm-image-optimization": "1.2.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250224.0",
+    "@react-router/dev": "^7.2.0",
+    "@tailwindcss/vite": "^4.0.8",
+    "@types/node": "^22",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "tailwindcss": "^4.0.8",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^3.109.3"
+  }
+}
