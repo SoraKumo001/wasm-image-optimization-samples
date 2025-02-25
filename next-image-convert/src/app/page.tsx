@@ -1,9 +1,8 @@
 "use client";
-
 import React, { useEffect, useMemo, useRef, useState, type FC } from "react";
 import { optimizeImage, setLimit } from "wasm-image-optimization/next";
 
-setLimit(10);
+setLimit(10); //Web Worker limit
 
 const classNames = (...classNames: (string | undefined | false)[]) =>
   classNames.reduce(
@@ -99,7 +98,6 @@ const AsyncImage: FC<{ file: File; format: (typeof formats)[number] }> = ({
       image && URL.createObjectURL(new Blob([image], { type: "image/webp" })),
     [image]
   );
-  //拡張子をformatに変更
   const filename = file.name.replace(/\.\w+$/, `.${format}`);
   return (
     <div className="border border-gray-300 rounded-4 overflow-hidden relative w-64 h-64 grid">
@@ -128,7 +126,12 @@ const Page = () => {
   return (
     <div className="p-4">
       <div>
-        <a href="https://github.com/SoraKumo001/next-webp">Source code</a>
+        <a
+          className="text-blue-600 hover:underline"
+          href="https://github.com/SoraKumo001/wasm-image-optimization-samples/tree/master/next-image-convert"
+        >
+          Source code
+        </a>
       </div>
       Timer indicating that front-end processing has not stopped.
       <Time />
