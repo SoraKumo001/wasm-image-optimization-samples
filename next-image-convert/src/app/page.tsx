@@ -31,7 +31,7 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
     <>
       <div
         className={classNames(
-          "w-64 h-32 border-dashed border flex justify-center items-center cursor-pointer select-none m-2 rounded-4xl",
+          "w-64 h-32 border-dashed border flex justify-center items-center cursor-pointer select-none m-2 rounded-4xl p-4",
           focus && "outline outline-blue-400"
         )}
         onDragOver={(e) => {
