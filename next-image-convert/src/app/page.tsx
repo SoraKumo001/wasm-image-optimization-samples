@@ -53,7 +53,7 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
           e.preventDefault();
         }}
       >
-        Drop here or copy/paste
+        Drop here, copy and paste or double-click to select the file.
       </div>
       <input
         ref={refInput}
