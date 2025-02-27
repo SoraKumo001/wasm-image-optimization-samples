@@ -6,15 +6,15 @@ import { optimizeImage } from 'wasm-image-optimization';
 
 init(await initYoga(yogaWasm));
 
-const cache = await caches.open('cloudflare-ogp');
+const cache = await caches.open('cloudflare-ogp2');
 
 type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 type FontStyle = 'normal' | 'italic';
 type FontSrc = { data: ArrayBuffer | string; name: string; weight?: Weight; style?: FontStyle; lang?: string };
 type Font = Omit<FontSrc, 'data'> & { data: ArrayBuffer | ArrayBufferView };
 
-const downloadFont = async (fontName: string) => {
-	return await fetch(`https://fonts.googleapis.com/css2?family=${encodeURI(fontName)}`)
+const downloadFont = async (name: string, weight: Weight) => {
+	return await fetch(`https://fonts.googleapis.com/css2?family=${encodeURI(name)}:wght@${weight}`)
 		.then((res) => res.text())
 		.then((css) => css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)?.[1])
 		.then(async (url) => {
@@ -22,19 +22,20 @@ const downloadFont = async (fontName: string) => {
 		});
 };
 
-const getFonts = async (fontList: string[], ctx: ExecutionContext): Promise<Font[]> => {
+const getFonts = async (fontList: (string | [string, Weight])[], ctx: ExecutionContext): Promise<Font[]> => {
 	const fonts: Font[] = [];
-	for (const fontName of fontList) {
-		const cacheKey = `http://font/${encodeURI(fontName)}`;
+	for (const font of fontList) {
+		const [fontName, weight] = Array.isArray(font) ? font : [font, 400 as Weight];
+		const cacheKey = `http://font/${encodeURI(fontName)}-`;
 
 		const response = await cache.match(cacheKey);
 		if (response) {
-			fonts.push({ name: fontName, data: await response.arrayBuffer(), weight: 400, style: 'normal' });
+			fonts.push({ name: fontName, data: await response.arrayBuffer(), weight, style: 'normal' });
 		} else {
-			const data = await downloadFont(fontName);
+			const data = await downloadFont(fontName, weight);
 			if (data) {
 				ctx.waitUntil(cache.put(cacheKey, new Response(data)));
-				fonts.push({ name: fontName, data, weight: 400, style: 'normal' });
+				fonts.push({ name: fontName, data, weight, style: 'normal' });
 			}
 		}
 	}
@@ -102,7 +103,7 @@ export const createOGP = async (
 		scale = 1,
 	}: {
 		ctx: ExecutionContext;
-		fonts: string[];
+		fonts: (string | [string, Weight])[];
 		emojis?: {
 			url: string;
 			upper?: boolean;

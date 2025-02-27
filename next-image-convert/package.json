@@ -7,7 +7,7 @@
 	"type": "module",
 	"dependencies": {
 		"next": "15.1.7",
-		"wasm-image-optimization": "^1.2.7"
+		"wasm-image-optimization": "^1.2.9"
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "4.0.8",

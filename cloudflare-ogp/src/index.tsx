@@ -102,7 +102,9 @@ const outputOGP = async (request: Request, _env: object, ctx: ExecutionContext):
 							wordBreak: 'break-all',
 							textOverflow: 'ellipsis',
 							lineClamp: 4,
+							fontWeight: '600',
 							lineHeight: '64px',
+							WebkitTextStroke: '16px rgba(200,200,200,0.2)',
 						}}
 					>
 						{title}
@@ -128,11 +130,12 @@ const outputOGP = async (request: Request, _env: object, ctx: ExecutionContext):
 		width: 1200,
 		height: 630,
 		fonts: [
+			['Noto Sans JP', 400],
+			['Noto Sans JP', 600],
 			'Noto Sans',
 			'Noto Sans Math',
 			'Noto Sans Symbols',
 			// 'Noto Sans Symbols 2',
-			'Noto Sans JP',
 			// 'Noto Sans KR',
 			// 'Noto Sans SC',
 			// 'Noto Sans TC',
