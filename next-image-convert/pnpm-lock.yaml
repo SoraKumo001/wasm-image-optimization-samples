@@ -12,8 +12,8 @@ importers:
         specifier: 15.2.0
         version: 15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       wasm-image-optimization:
-        specifier: ^1.2.10
-        version: 1.2.10
+        specifier: ^1.2.12
+        version: 1.2.12
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 4.0.9
@@ -501,8 +501,8 @@ packages:
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
-  wasm-image-optimization@1.2.10:
-    resolution: {integrity: sha512-teVf89VvK+DqR0Iyj4ZPV+nreivoW4Q3QQH1GtVi/H1eX8HjwX5xr5DgHX5W1XhbeiJktFObVhUnEbKqsdkykA==}
+  wasm-image-optimization@1.2.12:
+    resolution: {integrity: sha512-QZWOaDdpMWLjomPyJZEF3PnR+F8WaDisx3WNvdSaA3QFZIIbZeUbU0IjmYkAQZ8E/9OH8fuhZmfe6QT2DLocfQ==}
 
   worker-lib@2.0.3:
     resolution: {integrity: sha512-l4DePgXsr/n7kuY0r8ecYdoSt+R7qMJzKOq+7qDcxFUCBNZAg2QYyywmjqgUQ0Do/J73gZffLijpeWbo1t0Tpg==}
@@ -889,7 +889,7 @@ snapshots:
 
   undici-types@6.20.0: {}
 
-  wasm-image-optimization@1.2.10:
+  wasm-image-optimization@1.2.12:
     dependencies:
       worker-lib: 2.0.3
 

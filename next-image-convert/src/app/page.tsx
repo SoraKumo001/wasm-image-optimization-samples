@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState, type FC } from "react";
-import { optimizeImage, setLimit } from "wasm-image-optimization/next";
+import {
+  optimizeImageExt,
+  setLimit,
+  OptimizeResult,
+} from "wasm-image-optimization/next";
 
 setLimit(4); //Web Worker limit
 
@@ -82,18 +86,21 @@ const AsyncImage: FC<{
   format: (typeof formats)[number];
   quality: number;
   speed: number;
-}> = ({ file, format, quality, speed }) => {
+  size: [number, number];
+}> = ({ file, format, quality, size, speed }) => {
   const [time, setTime] = useState<number>();
-  const [image, setImage] = useState<Uint8Array | null | undefined>(null);
+  const [image, setImage] = useState<OptimizeResult | null | undefined>(null);
   useEffect(() => {
     const convert = async () => {
       setImage(null);
       const t = performance.now();
-      const image = await optimizeImage({
+      const image = await optimizeImageExt({
         image: await file.arrayBuffer(),
         format,
         quality,
         speed,
+        width: size[0] || undefined,
+        height: size[1] || undefined,
       });
       setTime(performance.now() - t);
       setImage(image);
@@ -102,7 +109,8 @@ const AsyncImage: FC<{
   }, [file]);
   const src = useMemo(
     () =>
-      image && URL.createObjectURL(new Blob([image], { type: "image/webp" })),
+      image &&
+      URL.createObjectURL(new Blob([image.data], { type: "image/webp" })),
     [image]
   );
   const filename = file.name.replace(/\.\w+$/, `.${format}`);
@@ -120,7 +128,16 @@ const AsyncImage: FC<{
           <div className="bg-white/80 w-full z-10 text-right p-0 absolute bottom-0 font-bold">
             <div>{filename}</div>
             <div>{time?.toLocaleString()}ms</div>
-            {Math.ceil(image.length / 1024).toLocaleString()}KB
+            <div>
+              Original: {image.originalWidth.toLocaleString()}x
+              {image.originalHeight.toLocaleString()} -{" "}
+              {Math.ceil(file.size / 1024).toLocaleString()}KB
+            </div>
+            <div>
+              Optimize: {image.width.toLocaleString()}x
+              {image.height.toLocaleString()} -{" "}
+              {Math.ceil(image.data.length / 1024).toLocaleString()}KB
+            </div>
           </div>
         </>
       )}
@@ -135,6 +152,7 @@ const Page = () => {
   const [images, setImages] = useState<File[]>([]);
   const [quality, setQuality] = useState(80);
   const [speed, setSpeed] = useState(6);
+  const [size, setSize] = useState<[number, number]>([0, 0]);
   const [limitWorker, setLimitWorker] = useState(10);
   return (
     <div className="p-4">
@@ -149,47 +167,63 @@ const Page = () => {
       Timer indicating that front-end processing has not stopped.
       <Time />
       <ImageInput onFiles={setImages} />
-      <div>
-        <label>
-          <input
-            type="number"
-            className="border border-gray-300 rounded-4 p-1"
-            value={speed}
-            onChange={(e) =>
-              setSpeed(Math.min(10, Math.max(0, Number(e.target.value))))
-            }
-          />
-          Speed(0-10,Slower-Faster): Avif
-        </label>
-      </div>
-      <div>
-        <label>
-          <input
-            type="number"
-            className="border border-gray-300 rounded-4 p-1"
-            value={quality}
-            onChange={(e) =>
-              setQuality(Math.min(100, Math.max(0, Number(e.target.value))))
-            }
-          />
-          Quality(0-100): Avif, Jpeg, WebP
-        </label>
-      </div>
-      <div>
-        <label>
-          <input
-            type="number"
-            className="border border-gray-300 rounded-4 p-1"
-            value={limitWorker}
-            onChange={(e) => {
-              const limit = Math.max(1, Number(e.target.value));
-              setLimit(limit);
-              setLimitWorker(limit);
-            }}
-          />
-          Web Workers(1-)
-        </label>
-      </div>
+      <label className="flex gap-2 items-center">
+        <input
+          type="number"
+          className="border border-gray-300 rounded-4 p-1"
+          value={size[0]}
+          onChange={(e) =>
+            setSize((v) => [Math.max(0, Number(e.target.value)), v[1]])
+          }
+        />
+        Width(0:Original)
+      </label>
+      <label className="flex gap-2 items-center">
+        <input
+          type="number"
+          className="border border-gray-300 rounded-4 p-1"
+          value={size[1]}
+          onChange={(e) =>
+            setSize((v) => [v[0], Math.max(0, Number(e.target.value))])
+          }
+        />
+        Height(0:Original)
+      </label>
+      <label className="flex gap-2 items-center">
+        <input
+          type="number"
+          className="border border-gray-300 rounded-4 p-1"
+          value={speed}
+          onChange={(e) =>
+            setSpeed(Math.min(10, Math.max(0, Number(e.target.value))))
+          }
+        />
+        Speed(0-10,Slower-Faster): Avif
+      </label>
+      <label className="flex gap-2 items-center">
+        <input
+          type="number"
+          className="border border-gray-300 rounded-4 p-1"
+          value={quality}
+          onChange={(e) =>
+            setQuality(Math.min(100, Math.max(0, Number(e.target.value))))
+          }
+        />
+        Quality(0-100): Avif, Jpeg, WebP
+      </label>
+      <label className="flex gap-2 items-center">
+        <input
+          type="number"
+          className="border border-gray-300 rounded-4 p-1"
+          value={limitWorker}
+          onChange={(e) => {
+            const limit = Math.max(1, Number(e.target.value));
+            setLimit(limit);
+            setLimitWorker(limit);
+          }}
+        />
+        Web Workers(1-)
+      </label>
       <hr className="m-4" />
       <div className="flex flex-wrap gap-4">
         {images.flatMap((file, index) => (
@@ -201,6 +235,7 @@ const Page = () => {
                 format={format}
                 quality={quality}
                 speed={speed}
+                size={size}
               />
             ))}
           </div>
