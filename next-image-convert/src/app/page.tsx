@@ -80,7 +80,7 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
   );
 };
 
-const formats = ["webp", "jpeg", "png", "avif"] as const;
+const formats = ["none", "webp", "jpeg", "png", "avif"] as const;
 const AsyncImage: FC<{
   file: File;
   format: (typeof formats)[number];
@@ -110,10 +110,15 @@ const AsyncImage: FC<{
   const src = useMemo(
     () =>
       image &&
-      URL.createObjectURL(new Blob([image.data], { type: "image/webp" })),
+      URL.createObjectURL(
+        new Blob([image.data], {
+          type: format === "none" ? file.type : `image/${format}`,
+        })
+      ),
     [image]
   );
-  const filename = file.name.replace(/\.\w+$/, `.${format}`);
+  const filename =
+    format === "none" ? file.name : file.name.replace(/\.\w+$/, `.${format}`);
   return (
     <div className="border border-gray-300 rounded-4 overflow-hidden relative w-64 h-64 grid">
       {image === undefined && <div>Error</div>}
@@ -129,13 +134,8 @@ const AsyncImage: FC<{
             <div>{filename}</div>
             <div>{time?.toLocaleString()}ms</div>
             <div>
-              Original: {image.originalWidth.toLocaleString()}x
-              {image.originalHeight.toLocaleString()} -{" "}
-              {Math.ceil(file.size / 1024).toLocaleString()}KB
-            </div>
-            <div>
-              Optimize: {image.width.toLocaleString()}x
-              {image.height.toLocaleString()} -{" "}
+              {format !== "none" ? "Optimize" : "Original"}:{" "}
+              {image.width.toLocaleString()}x{image.height.toLocaleString()} -{" "}
               {Math.ceil(image.data.length / 1024).toLocaleString()}KB
             </div>
           </div>
