@@ -12,8 +12,8 @@ importers:
         specifier: 15.2.0
         version: 15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       wasm-image-optimization:
-        specifier: ^1.2.13
-        version: 1.2.13
+        specifier: ^1.2.22
+        version: 1.2.22
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 4.0.9
@@ -800,8 +800,8 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  wasm-image-optimization@1.2.13:
-    resolution: {integrity: sha512-AF7IgI2Gd5miNyDlfNp6I5L7ZKy2YzlHeK5Uz2FPFnW9dQmHRmHuBO5LKMHEqkqu42ktcNhGeSdi7I6PDbpOcA==}
+  wasm-image-optimization@1.2.22:
+    resolution: {integrity: sha512-hRJITgmBnQvIe7x4krz0WjHd70+hgGV2HS9ii2vvNvxhS5ES0dlTH5OTih9oFCQEEtI2o3iQAGeHC6mCcBPBXw==}
 
   watchpack@2.4.2:
     resolution: {integrity: sha512-TnbFSbcOCcDgjZ4piURLCbJ3nJhznVh9kw6F6iokjiFPl8ONxe9A6nMDVXDiNbrSfLILs6vB07F7wLBrwPYzJw==}
@@ -1503,7 +1503,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  wasm-image-optimization@1.2.13:
+  wasm-image-optimization@1.2.22:
     dependencies:
       worker-lib: 2.0.3
 
