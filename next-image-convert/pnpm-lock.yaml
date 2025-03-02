@@ -12,15 +12,15 @@ importers:
         specifier: 15.2.0
         version: 15.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       wasm-image-optimization:
-        specifier: ^1.2.23
-        version: 1.2.23
+        specifier: ^1.2.25
+        version: 1.2.25
     devDependencies:
       '@tailwindcss/postcss':
         specifier: 4.0.9
         version: 4.0.9
       '@types/node':
-        specifier: 22.13.5
-        version: 22.13.5
+        specifier: 22.13.8
+        version: 22.13.8
       '@types/react':
         specifier: 19.0.10
         version: 19.0.10
@@ -34,8 +34,8 @@ importers:
         specifier: 4.0.9
         version: 4.0.9
       typescript:
-        specifier: 5.7.3
-        version: 5.7.3
+        specifier: 5.8.2
+        version: 5.8.2
 
 packages:
 
@@ -317,8 +317,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@22.13.5':
-    resolution: {integrity: sha512-+lTU0PxZXn0Dr1NBtC7Y8cR21AJr87dLLU953CWA6pMxxv/UDc7jYAY90upcrie1nRcD6XNG5HOYEDtgW5TxAg==}
+  '@types/node@22.13.8':
+    resolution: {integrity: sha512-G3EfaZS+iOGYWLLRCEAXdWK9my08oHNZ+FHluRiggIYJPOXzhOiDgpVCUHaUvyIC5/fj7C/p637jdzC666AOKQ==}
 
   '@types/react@19.0.10':
     resolution: {integrity: sha512-JuRQ9KXLEjaUNjTWpzuR231Z2WpIwczOkBEIvbHNCzQefFIT0L8IqE6NV6ULLyC1SI/i234JnDoMkfg+RjQj2g==}
@@ -783,8 +783,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  typescript@5.7.3:
-    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -800,8 +800,8 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  wasm-image-optimization@1.2.23:
-    resolution: {integrity: sha512-7B06FKwTcVbDJ/21a43SxeLFOXR6iIk0YHvyPX0W5jJuneXM7iCkH5RFiWe6ji/i9EHvKBOcAa5PMfvnsMcQ0A==}
+  wasm-image-optimization@1.2.25:
+    resolution: {integrity: sha512-tZwmrZFe6RphMBJRIauoxYE4Jhr83qEAX4CPqwZRPdfirWYYctC0Gx9t97RQ38FrqOxYLGOGC7h7/zwO2fWK6Q==}
 
   watchpack@2.4.2:
     resolution: {integrity: sha512-TnbFSbcOCcDgjZ4piURLCbJ3nJhznVh9kw6F6iokjiFPl8ONxe9A6nMDVXDiNbrSfLILs6vB07F7wLBrwPYzJw==}
@@ -821,8 +821,8 @@ packages:
       webpack-cli:
         optional: true
 
-  worker-lib@2.0.3:
-    resolution: {integrity: sha512-l4DePgXsr/n7kuY0r8ecYdoSt+R7qMJzKOq+7qDcxFUCBNZAg2QYyywmjqgUQ0Do/J73gZffLijpeWbo1t0Tpg==}
+  worker-lib@2.0.6:
+    resolution: {integrity: sha512-xXE8PLUMGGZg1QurqrwrjFn5TyKNzH4aMNnGCyZwxjXQokdF6/zAlLhk5kJht6CEiit5/MKRK30bBbXVDFO42Q==}
 
 snapshots:
 
@@ -1038,7 +1038,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@22.13.5':
+  '@types/node@22.13.8':
     dependencies:
       undici-types: 6.20.0
 
@@ -1256,7 +1256,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.13.5
+      '@types/node': 22.13.8
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -1489,7 +1489,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  typescript@5.7.3: {}
+  typescript@5.8.2: {}
 
   undici-types@6.20.0: {}
 
@@ -1503,9 +1503,9 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  wasm-image-optimization@1.2.23:
+  wasm-image-optimization@1.2.25:
     dependencies:
-      worker-lib: 2.0.3
+      worker-lib: 2.0.6
 
   watchpack@2.4.2:
     dependencies:
@@ -1544,4 +1544,4 @@ snapshots:
       - esbuild
       - uglify-js
 
-  worker-lib@2.0.3: {}
+  worker-lib@2.0.6: {}

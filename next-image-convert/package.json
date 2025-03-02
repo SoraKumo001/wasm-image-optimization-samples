@@ -7,15 +7,15 @@
 	"type": "module",
 	"dependencies": {
 		"next": "15.2.0",
-		"wasm-image-optimization": "^1.2.23"
+		"wasm-image-optimization": "^1.2.25"
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "4.0.9",
-		"@types/node": "22.13.5",
+		"@types/node": "22.13.8",
 		"@types/react": "19.0.10",
 		"file-loader": "6.2.0",
 		"postcss": "8.5.3",
 		"tailwindcss": "4.0.9",
-		"typescript": "5.7.3"
+		"typescript": "5.8.2"
 	}
 }

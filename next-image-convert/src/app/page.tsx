@@ -4,6 +4,7 @@ import {
   optimizeImageExt,
   setLimit,
   OptimizeResult,
+  waitReady,
 } from "wasm-image-optimization/next";
 
 setLimit(4); //Web Worker limit
@@ -93,6 +94,7 @@ const AsyncImage: FC<{
   useEffect(() => {
     const convert = async () => {
       setImage(null);
+      await waitReady();
       const t = performance.now();
       const image = await optimizeImageExt({
         image: await file.arrayBuffer(),
