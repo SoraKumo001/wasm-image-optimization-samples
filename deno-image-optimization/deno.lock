@@ -1,17 +1,17 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:wasm-image-optimization@*": "1.2.2"
+    "npm:wasm-image-optimization@*": "1.2.25"
   },
   "npm": {
-    "wasm-image-optimization@1.2.2": {
-      "integrity": "sha512-y6fJRbTSOpKTCjdm4adkvTxDNtb0D6hwYOPmt4Bx9AfegWkhK4FSLgKvQIVLcx21ZgV23cd/NRiVXQdcyonTWQ==",
+    "wasm-image-optimization@1.2.25": {
+      "integrity": "sha512-tZwmrZFe6RphMBJRIauoxYE4Jhr83qEAX4CPqwZRPdfirWYYctC0Gx9t97RQ38FrqOxYLGOGC7h7/zwO2fWK6Q==",
       "dependencies": [
         "worker-lib"
       ]
     },
-    "worker-lib@2.0.0": {
-      "integrity": "sha512-ackJlCfVeCeJDugvl3Yp8w3JHWhESTzipuvTOsWG29AXhBEydLuyXybbvuX/upqATlphOP9zj3MYxqe3ooKf3A=="
+    "worker-lib@2.0.6": {
+      "integrity": "sha512-xXE8PLUMGGZg1QurqrwrjFn5TyKNzH4aMNnGCyZwxjXQokdF6/zAlLhk5kJht6CEiit5/MKRK30bBbXVDFO42Q=="
     }
   }
 }

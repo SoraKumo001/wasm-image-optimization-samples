@@ -117,3 +117,7 @@ const config = {
 };
 export default config;
 ```
+
+## Local test
+
+http://localhost:8787/?url=https://raw.githubusercontent.com/SoraKumo001/cloudflare-ogp/refs/heads/master/sample/image.jpg&q=80

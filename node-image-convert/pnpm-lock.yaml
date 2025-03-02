@@ -9,21 +9,18 @@ importers:
   .:
     dependencies:
       wasm-image-optimization:
-        specifier: 1.2.1
-        version: 1.2.1
-      worker-lib:
-        specifier: 1.0.4
-        version: 1.0.4
+        specifier: 1.2.25
+        version: 1.2.25
     devDependencies:
       '@types/node':
-        specifier: 22.13.5
-        version: 22.13.5
+        specifier: 22.13.8
+        version: 22.13.8
       tsx:
         specifier: 4.19.3
         version: 4.19.3
       typescript:
-        specifier: 5.7.3
-        version: 5.7.3
+        specifier: 5.8.2
+        version: 5.8.2
 
 packages:
 
@@ -177,8 +174,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@types/node@22.13.5':
-    resolution: {integrity: sha512-+lTU0PxZXn0Dr1NBtC7Y8cR21AJr87dLLU953CWA6pMxxv/UDc7jYAY90upcrie1nRcD6XNG5HOYEDtgW5TxAg==}
+  '@types/node@22.13.8':
+    resolution: {integrity: sha512-G3EfaZS+iOGYWLLRCEAXdWK9my08oHNZ+FHluRiggIYJPOXzhOiDgpVCUHaUvyIC5/fj7C/p637jdzC666AOKQ==}
 
   esbuild@0.25.0:
     resolution: {integrity: sha512-BXq5mqc8ltbaN34cDqWuYKyNhX8D/Z0J1xdtdQ8UcIIIyJyz+ZMKUt58tF3SrZ85jcfN/PZYhjR5uDQAYNVbuw==}
@@ -201,19 +198,19 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  typescript@5.7.3:
-    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
+  typescript@5.8.2:
+    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
-  wasm-image-optimization@1.2.1:
-    resolution: {integrity: sha512-gt4NRGdxRWaNcLhT1aQ85u9DfjRBKXBDIKUzxnG1/7uK/v0qzbQj3sBPN1LskVEEbRhH2716rIKpqM04TSotkA==}
+  wasm-image-optimization@1.2.25:
+    resolution: {integrity: sha512-tZwmrZFe6RphMBJRIauoxYE4Jhr83qEAX4CPqwZRPdfirWYYctC0Gx9t97RQ38FrqOxYLGOGC7h7/zwO2fWK6Q==}
 
-  worker-lib@1.0.4:
-    resolution: {integrity: sha512-8zgEfJmi8eTVBLr0wV+6J1OVza1asQE27oXLzmFlhU2wkI13OnF5NwOz+TcsgGb8fwUbfGcJlIFgjfJPolfLyA==}
+  worker-lib@2.0.6:
+    resolution: {integrity: sha512-xXE8PLUMGGZg1QurqrwrjFn5TyKNzH4aMNnGCyZwxjXQokdF6/zAlLhk5kJht6CEiit5/MKRK30bBbXVDFO42Q==}
 
 snapshots:
 
@@ -292,7 +289,7 @@ snapshots:
   '@esbuild/win32-x64@0.25.0':
     optional: true
 
-  '@types/node@22.13.5':
+  '@types/node@22.13.8':
     dependencies:
       undici-types: 6.20.0
 
@@ -340,12 +337,12 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  typescript@5.7.3: {}
+  typescript@5.8.2: {}
 
   undici-types@6.20.0: {}
 
-  wasm-image-optimization@1.2.1:
+  wasm-image-optimization@1.2.25:
     dependencies:
-      worker-lib: 1.0.4
+      worker-lib: 2.0.6
 
-  worker-lib@1.0.4: {}
+  worker-lib@2.0.6: {}

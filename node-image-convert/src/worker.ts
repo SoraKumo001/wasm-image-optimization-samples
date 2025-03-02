@@ -3,6 +3,7 @@ import {
   optimizeImage,
   close,
   setLimit,
+  waitReady,
 } from "wasm-image-optimization/node-worker";
 
 const formats = ["webp", "jpeg", "png", "avif"] as const;
@@ -17,9 +18,10 @@ const main = async () => {
   const p = files.map(async (file) => {
     return fs.readFile(`./images/${file}`).then((image) => {
       console.log(
-        `${file} ${Math.floor(image.length / 1024).toLocaleString()}KB`
+        `${file} ${Math.ceil(image.length / 1024).toLocaleString()}KB`
       );
-      const p = formats.map((format) => {
+      const p = formats.map(async (format) => {
+        await waitReady();
         const label = `[${file}] -> [${format}]`;
         console.time(label);
         return optimizeImage({
@@ -31,7 +33,7 @@ const main = async () => {
           if (encoded) {
             console.timeLog(
               label,
-              `${Math.floor(encoded.length / 1024).toLocaleString()}KB`
+              `${Math.ceil(encoded.length / 1024).toLocaleString()}KB`
             );
             const fileName = file.split(".")[0];
             fs.writeFile(`image_output/${fileName}.${format}`, encoded);

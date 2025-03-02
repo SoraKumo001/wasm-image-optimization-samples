@@ -8,12 +8,11 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"wasm-image-optimization": "1.2.1",
-		"worker-lib": "1.0.4"
+		"wasm-image-optimization": "1.2.25"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.5",
+		"@types/node": "22.13.8",
 		"tsx": "4.19.3",
-		"typescript": "5.7.3"
+		"typescript": "5.8.2"
 	}
 }
