@@ -4,9 +4,11 @@ import {
   optimizeImageExt,
   setLimit,
   waitReady,
+  launchWorker,
 } from "wasm-image-optimization/web-worker";
 
-setLimit(4); //Web Worker limit
+setLimit(8); // Web Worker limit
+launchWorker(); // Prepare Worker in advance.
 
 const classNames = (...classNames: (string | undefined | false)[]) =>
   classNames.reduce(
@@ -155,6 +157,8 @@ const Page = () => {
   const [speed, setSpeed] = useState(6);
   const [size, setSize] = useState<[number, number]>([0, 0]);
   const [limitWorker, setLimitWorker] = useState(10);
+  const [formatList, setFormatList] =
+    useState<ReadonlyArray<(typeof formats)[number]>>(formats);
   return (
     <div className="p-4">
       <div>
@@ -225,20 +229,38 @@ const Page = () => {
         />
         Web Workers(1-)
       </label>
+      <div className="flex gap-2">
+        {formats.map((format) => (
+          <label key={format} className="flex gap-1 ">
+            <input
+              type="checkbox"
+              checked={formatList.includes(format)}
+              onChange={(e) => {
+                const checked = e.currentTarget.checked;
+                if (checked) setFormatList((v) => [...v, format]);
+                else setFormatList((v) => v.filter((f) => f !== format));
+              }}
+            />
+            {format}
+          </label>
+        ))}
+      </div>
       <hr className="m-4" />
       <div className="flex flex-wrap gap-4">
         {images.flatMap((file, index) => (
           <div key={index} className="flex flex-wrap gap-4">
-            {formats.map((format, index) => (
-              <AsyncImage
-                key={index}
-                file={file}
-                format={format}
-                quality={quality}
-                speed={speed}
-                size={size}
-              />
-            ))}
+            {formats
+              .filter((f) => formatList.includes(f))
+              .map((format) => (
+                <AsyncImage
+                  key={format}
+                  file={file}
+                  format={format}
+                  quality={quality}
+                  speed={speed}
+                  size={size}
+                />
+              ))}
           </div>
         ))}
       </div>

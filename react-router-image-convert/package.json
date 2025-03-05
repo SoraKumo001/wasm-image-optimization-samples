@@ -16,10 +16,10 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.2.0",
-    "wasm-image-optimization": "1.2.26"
+    "wasm-image-optimization": "1.2.28"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250224.0",
+    "@cloudflare/workers-types": "^4.20250303.0",
     "@react-router/dev": "^7.2.0",
     "@tailwindcss/vite": "^4.0.9",
     "@types/node": "^22",
@@ -29,6 +29,6 @@
     "typescript": "^5.8.2",
     "vite": "^6.2.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^3.111.0"
+    "wrangler": "^3.112.0"
   }
 }
