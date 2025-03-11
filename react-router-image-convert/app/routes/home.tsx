@@ -171,7 +171,7 @@ const Page = () => {
       </div>
       Timer indicating that front-end processing has not stopped.
       <Time />
-      <ImageInput onFiles={setImages} />
+      <ImageInput onFiles={(v) => setImages((i) => [...v, ...i])} />
       <label className="flex gap-2 items-center">
         <input
           type="number"
