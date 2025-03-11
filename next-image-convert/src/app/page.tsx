@@ -308,7 +308,9 @@ const Page = () => {
                         )
                           .toLocaleString()
                           .padStart(8)}KB ${v.time
-                          ?.toLocaleString()
+                          .toLocaleString(undefined, {
+                            minimumFractionDigits: 1,
+                          })
                           .padStart(8)}ms`,
                       ].sort((a, b) => (a < b ? -1 : 1))
                     );
