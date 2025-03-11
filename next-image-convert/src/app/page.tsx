@@ -96,6 +96,8 @@ const AsyncImage: FC<{
   useEffect(() => {
     const convert = async () => {
       setImage(null);
+      // Wait for WebWorkers to become available.
+      // If you don't wait, they will still be loaded in the queue, but the conversion time will no longer be accurately measured.
       await waitReady();
       const t = performance.now();
       const image = await optimizeImageExt({

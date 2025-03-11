@@ -1,3 +1,4 @@
 node_modules
 image_output
 tsconfig.tsbuildinfo
+dist

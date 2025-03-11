@@ -127,7 +127,7 @@ const AsyncImage: FC<{
       {image === undefined && <div>Error</div>}
       {src && image && (
         <>
-          <a download={filename} href={src}>
+          <a href={src} target="_blank">
             <img
               className="flex-1 object-contain block overflow-hidden"
               src={src}

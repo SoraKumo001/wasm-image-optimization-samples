@@ -72,6 +72,7 @@ const handleRequest = async (request: Request, _env: object, ctx: ExecutionConte
 		width: width ? Number(width) : undefined,
 		quality: quality ? Number(quality) : undefined,
 		format,
+		speed: 9,
 	});
 	const response = new Response(image, {
 		headers: {
