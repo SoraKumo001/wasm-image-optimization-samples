@@ -82,34 +82,50 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
   );
 };
 
-const formats = ["none", "webp", "jpeg", "png", "avif"] as const;
+const formats = ["none", "avif", "webp", "jpeg", "png"] as const;
 const AsyncImage: FC<{
   file: File;
   format: (typeof formats)[number];
   quality: number;
   speed: number;
   size: [number, number];
-}> = ({ file, format, quality, size, speed }) => {
+  onFinished?: ({}: {
+    image: NonNullable<Awaited<ReturnType<typeof optimizeImageExt>>>;
+    format: (typeof formats)[number];
+    quality: number;
+    speed: number;
+    time: number;
+  }) => void;
+}> = ({ file, format, quality, size, speed, onFinished }) => {
   const [time, setTime] = useState<number>();
   const [image, setImage] = useState<OptimizeResult | null | undefined>(null);
-  useEffect(() => {
+  const property = useRef<{ isInit?: boolean }>({}).current;
+  if (!property.isInit) {
+    property.isInit = true;
     const convert = async () => {
       setImage(null);
+      // Wait for WebWorkers to become available.
+      // If you don't wait, they will still be loaded in the queue, but the conversion time will no longer be accurately measured.
       await waitReady();
+      const buffer = await file.arrayBuffer();
       const t = performance.now();
       const image = await optimizeImageExt({
-        image: await file.arrayBuffer(),
+        image: buffer,
         format,
         quality,
         speed,
         width: size[0] || undefined,
         height: size[1] || undefined,
       });
-      setTime(performance.now() - t);
+      const time = performance.now() - t;
+      setTime(time);
       setImage(image);
+      if (image) {
+        onFinished?.({ image, format, speed, quality, time });
+      }
     };
     convert();
-  }, [file]);
+  }
   const src = useMemo(
     () =>
       image &&
@@ -127,7 +143,7 @@ const AsyncImage: FC<{
       {image === undefined && <div>Error</div>}
       {src && image && (
         <>
-          <a href={src} target="_blank">
+          <a target="_blank" href={src}>
             <img
               className="flex-1 object-contain block overflow-hidden"
               src={src}
@@ -159,19 +175,37 @@ const Page = () => {
   const [limitWorker, setLimitWorker] = useState(10);
   const [formatList, setFormatList] =
     useState<ReadonlyArray<(typeof formats)[number]>>(formats);
+  const [logs, setLogs] = useState<string[]>([]);
+  const logText = useMemo(() => logs.join("\n"), [logs]);
   return (
     <div className="p-4">
       <div>
         <a
           className="text-blue-600 hover:underline"
-          href="https://github.com/SoraKumo001/wasm-image-optimization-samples/tree/master/react-router-image-convert"
+          href="https://github.com/SoraKumo001/wasm-image-optimization-samples/tree/master/next-image-convert"
         >
           Source code
         </a>
       </div>
       Timer indicating that front-end processing has not stopped.
       <Time />
-      <ImageInput onFiles={(v) => setImages((i) => [...v, ...i])} />
+      <div className="flex">
+        <ImageInput onFiles={(v) => setImages((i) => [...i, ...v])} />
+        <textarea
+          className="border flex-1 border-gray-400 p-2 rounded bg-gray-50 font-mono"
+          value={logText}
+          readOnly
+        />
+      </div>
+      <button
+        className="text-blue-700 hover:text-white border border-blue-500 hover:bg-blue-600 rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 cursor-pointer"
+        onClick={() => {
+          setImages([]);
+          setLogs([]);
+        }}
+      >
+        Clear
+      </button>
       <label className="flex gap-2 items-center">
         <input
           type="number"
@@ -225,6 +259,7 @@ const Page = () => {
             const limit = Math.max(1, Number(e.target.value));
             setLimit(limit);
             setLimitWorker(limit);
+            launchWorker();
           }}
         />
         Web Workers(1-)
@@ -251,7 +286,7 @@ const Page = () => {
           <div key={index} className="flex flex-wrap gap-4">
             {formats
               .filter((f) => formatList.includes(f))
-              .map((format) => (
+              .map((format, index2) => (
                 <AsyncImage
                   key={format}
                   file={file}
@@ -259,6 +294,26 @@ const Page = () => {
                   quality={quality}
                   speed={speed}
                   size={size}
+                  onFinished={(v) => {
+                    setLogs((l) =>
+                      [
+                        ...l,
+                        `${index}-${index2}-${format.padEnd(4)} ${file.name}(${
+                          v.image.originalWidth
+                        }x${v.image.originalHeight}) (${v.image.width}x${
+                          v.image.height
+                        }) Speed:${speed} Quality:${quality} ${Math.ceil(
+                          v.image.data.length / 1024
+                        )
+                          .toLocaleString()
+                          .padStart(8)}KB ${v.time
+                          .toLocaleString(undefined, {
+                            minimumFractionDigits: 1,
+                          })
+                          .padStart(8)}ms`,
+                      ].sort((a, b) => (a < b ? -1 : 1))
+                    );
+                  }}
                 />
               ))}
           </div>
