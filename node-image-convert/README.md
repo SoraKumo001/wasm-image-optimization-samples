@@ -2,6 +2,8 @@
 
 ## Single-threaded
 
+![](./document/convert_single.webp)
+
 ```ts
 import { promises as fs } from "node:fs";
 import { optimizeImage } from "wasm-image-optimization";
@@ -76,6 +78,8 @@ Single thread: 3.281s
 ```
 
 ## Multi-threaded
+
+![](./document/convert_multi.webp)
 
 ```ts
 import { promises as fs } from "node:fs";
