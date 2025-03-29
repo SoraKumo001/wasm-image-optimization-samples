@@ -1,21 +1,21 @@
 {
-	"scripts": {
-		"dev": "next",
-		"build": "next build",
-		"start": "next start"
-	},
-	"type": "module",
-	"dependencies": {
-		"next": "15.2.1",
-		"wasm-image-optimization": "^1.2.28"
-	},
-	"devDependencies": {
-		"@tailwindcss/postcss": "4.0.9",
-		"@types/node": "22.13.9",
-		"@types/react": "19.0.10",
-		"file-loader": "6.2.0",
-		"postcss": "8.5.3",
-		"tailwindcss": "4.0.9",
-		"typescript": "5.8.2"
-	}
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "type": "module",
+  "dependencies": {
+    "next": "15.2.1",
+    "wasm-image-optimization": "^1.2.28"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.0.9",
+    "@types/node": "22.13.9",
+    "@types/react": "19.0.10",
+    "file-loader": "6.2.0",
+    "postcss": "8.5.3",
+    "tailwindcss": "4.0.9",
+    "typescript": "5.8.2"
+  }
 }
