@@ -30,7 +30,7 @@ Deno.serve(async (request) => {
   const isWebp = isType(accept, "webp");
 
   const cache = await caches.open(
-    `image2-${isAvif ? "-avif" : ""}${isWebp ? "-webp" : ""}`
+    `image-${isAvif ? "-avif" : ""}${isWebp ? "-webp" : ""}`
   );
 
   const cached = await cache.match(request);
