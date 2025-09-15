@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "deno run --watch --allow-all src/index.ts",
+    "update": "deno cache --reload src/index.ts",
     "deploy": "npx next-exec -- deployctl deploy --project deno-image --build --include=./src --prod"
   }
 }
