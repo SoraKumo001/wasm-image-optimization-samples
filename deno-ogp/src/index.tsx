@@ -1,7 +1,3 @@
-import type {} from "npm:@types/react";
-/** @jsxFrag React.Fragment */
-/** @jsx React.createElement */
-import React from "npm:react";
 import { createOGP } from "./createOGP.ts";
 
 Deno.serve(async (request) => {

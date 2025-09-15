@@ -88,6 +88,7 @@ const AsyncImage: FC<{
   format: (typeof formats)[number];
   quality: number;
   speed: number;
+  filter: boolean;
   size: [number, number];
   onFinished?: ({}: {
     image: NonNullable<Awaited<ReturnType<typeof optimizeImageExt>>>;
@@ -96,7 +97,7 @@ const AsyncImage: FC<{
     speed: number;
     time: number;
   }) => void;
-}> = ({ file, format, quality, size, speed, onFinished }) => {
+}> = ({ file, format, quality, size, speed, filter, onFinished }) => {
   const [time, setTime] = useState<number>();
   const [image, setImage] = useState<OptimizeResult | null | undefined>(null);
   const property = useRef<{ isInit?: boolean }>({}).current;
@@ -114,6 +115,7 @@ const AsyncImage: FC<{
         format,
         quality,
         speed,
+        filter,
         width: size[0] || undefined,
         height: size[1] || undefined,
       });
@@ -130,7 +132,7 @@ const AsyncImage: FC<{
     () =>
       image &&
       URL.createObjectURL(
-        new Blob([image.data], {
+        new Blob([image.data as BufferSource], {
           type: format === "none" ? file.type : `image/${format}`,
         })
       ),
@@ -175,6 +177,7 @@ const Page = () => {
   const [limitWorker, setLimitWorker] = useState(10);
   const [formatList, setFormatList] =
     useState<ReadonlyArray<(typeof formats)[number]>>(formats);
+  const [filter, setFilter] = useState(true);
   const [logs, setLogs] = useState<string[]>([]);
   const logText = useMemo(() => logs.join("\n"), [logs]);
   return (
@@ -209,7 +212,7 @@ const Page = () => {
       <label className="flex gap-2 items-center">
         <input
           type="number"
-          className="border border-gray-300 rounded-4 p-1"
+          className="border border-gray-300 rounded-4 p-1 w-16"
           value={size[0]}
           onChange={(e) =>
             setSize((v) => [Math.max(0, Number(e.target.value)), v[1]])
@@ -220,7 +223,7 @@ const Page = () => {
       <label className="flex gap-2 items-center">
         <input
           type="number"
-          className="border border-gray-300 rounded-4 p-1"
+          className="border border-gray-300 rounded-4 p-1 w-16"
           value={size[1]}
           onChange={(e) =>
             setSize((v) => [v[0], Math.max(0, Number(e.target.value))])
@@ -231,7 +234,7 @@ const Page = () => {
       <label className="flex gap-2 items-center">
         <input
           type="number"
-          className="border border-gray-300 rounded-4 p-1"
+          className="border border-gray-300 rounded-4 p-1 w-16"
           value={speed}
           onChange={(e) =>
             setSpeed(Math.min(10, Math.max(0, Number(e.target.value))))
@@ -242,7 +245,7 @@ const Page = () => {
       <label className="flex gap-2 items-center">
         <input
           type="number"
-          className="border border-gray-300 rounded-4 p-1"
+          className="border border-gray-300 rounded-4 p-1 w-16"
           value={quality}
           onChange={(e) =>
             setQuality(Math.min(100, Math.max(0, Number(e.target.value))))
@@ -253,7 +256,7 @@ const Page = () => {
       <label className="flex gap-2 items-center">
         <input
           type="number"
-          className="border border-gray-300 rounded-4 p-1"
+          className="border border-gray-300 rounded-4 p-1 w-16"
           value={limitWorker}
           onChange={(e) => {
             const limit = Math.max(1, Number(e.target.value));
@@ -263,6 +266,16 @@ const Page = () => {
           }}
         />
         Web Workers(1-)
+      </label>
+      <label className="flex gap-2 items-center">
+        <div className="border border-gray-300 rounded-4 p-1 w-16">
+          <input
+            type="checkbox"
+            checked={filter}
+            onChange={(e) => setFilter(e.currentTarget.checked)}
+          />
+        </div>
+        Resize filter
       </label>
       <div className="flex gap-2">
         {formats.map((format) => (
@@ -294,6 +307,7 @@ const Page = () => {
                   quality={quality}
                   speed={speed}
                   size={size}
+                  filter={filter}
                   onFinished={(v) => {
                     setLogs((l) =>
                       [

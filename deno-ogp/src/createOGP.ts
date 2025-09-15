@@ -1,6 +1,7 @@
-import satori, { init } from "npm:satori/wasm";
-import initYoga from "npm:yoga-wasm-web";
-import { optimizeImage } from "npm:wasm-image-optimization";
+import initYoga from "yoga-wasm-web";
+import satori, { init } from "satori";
+import { optimizeImage } from "wasm-image-optimization";
+import type { JSX } from "react/jsx-runtime";
 
 const importModule = (name: string) => {
   return fetch(new URL(`../../node_modules/${name}`, import.meta.url))
