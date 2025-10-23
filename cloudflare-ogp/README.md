@@ -1,6 +1,6 @@
 # cloudflare-ogp
 
-Please use satori@15.0.2, later versions do not work with Cloudflare.
+Please use satori@0.15.2, later versions do not work with Cloudflare.
 
 ## usage
 

@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "deno run --watch --allow-all src/index.tsx",
+    "update": "deno cache --reload src/index.ts",
     "deploy": "npx next-exec -- deployctl deploy --project deno-ogp --build --include=./src --prod"
   },
   "repository": "https://github.com/SoraKumo001/deno-ogp-image",

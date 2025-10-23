@@ -6,7 +6,7 @@ import {
   setLimit,
   waitReady,
   launchWorker,
-} from "wasm-image-optimization/next";
+} from "wasm-image-optimization/web-worker";
 
 setLimit(8); // Web Worker limit
 launchWorker(); // Prepare Worker in advance.

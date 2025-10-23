@@ -7,7 +7,7 @@ https://next-image-convert.vercel.app/
 ```ts
 "use client";
 import React, { useEffect, useMemo, useRef, useState, type FC } from "react";
-import { optimizeImage, setLimit } from "wasm-image-optimization/next";
+import { optimizeImage, setLimit } from "wasm-image-optimization";
 
 setLimit(10); //Web Worker limit
 

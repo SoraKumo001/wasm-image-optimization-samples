@@ -10,26 +10,26 @@
 		"test": "jest"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250913.0",
-		"@eslint/js": "9.35.0",
+		"@cloudflare/workers-types": "^4.20251014.0",
+		"@eslint/js": "9.38.0",
 		"@types/jest": "^30.0.0",
-		"@typescript-eslint/eslint-plugin": "^8.43.0",
-		"@typescript-eslint/parser": "^8.43.0",
-		"eslint": "9.35.0",
+		"@typescript-eslint/eslint-plugin": "^8.46.2",
+		"@typescript-eslint/parser": "^8.46.2",
+		"eslint": "9.38.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-import-resolver-typescript": "^4.4.4",
 		"eslint-plugin-import": "^2.32.0",
-		"jest": "^30.1.3",
+		"jest": "^30.2.0",
 		"jest-async": "^1.0.7",
 		"prettier": "^3.6.2",
-		"ts-jest": "^29.4.1",
+		"ts-jest": "^29.4.5",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.9.2",
-		"typescript-eslint": "^8.43.0",
-		"wrangler": "^4.37.0"
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.46.2",
+		"wrangler": "^4.44.0"
 	},
 	"dependencies": {
-		"wasm-image-optimization": "^1.3.0"
+		"wasm-image-optimization": "^1.4.0"
 	},
 	"main": "index.js",
 	"repository": "https://github.com/SoraKumo001/cloudflare-workers-image-optimization",
