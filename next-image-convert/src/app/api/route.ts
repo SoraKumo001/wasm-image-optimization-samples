@@ -1,4 +1,4 @@
-import { optimizeImage } from "wasm-image-optimization/next-api";
+import { optimizeImage } from "wasm-image-optimization/esm";
 export async function GET() {
   const image = await fetch(
     "https://raw.githubusercontent.com/SoraKumo001/cloudflare-ogp/refs/heads/master/sample/image.jpg"

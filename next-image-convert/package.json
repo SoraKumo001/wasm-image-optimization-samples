@@ -6,16 +6,16 @@
   },
   "type": "module",
   "dependencies": {
-    "next": "16.0.0",
+    "next": "16.1.4",
     "wasm-image-optimization": "^1.4.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.1.15",
-    "@types/node": "24.9.1",
-    "@types/react": "19.2.2",
+    "@tailwindcss/postcss": "4.1.18",
+    "@types/node": "25.0.9",
+    "@types/react": "19.2.9",
     "file-loader": "6.2.0",
     "postcss": "8.5.6",
-    "tailwindcss": "4.1.15",
+    "tailwindcss": "4.1.18",
     "typescript": "5.9.3"
   }
 }
