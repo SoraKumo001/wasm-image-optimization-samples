@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-import-prefix no-unversioned-import
 import { optimizeImage } from "npm:wasm-image-optimization";
 
 const isValidUrl = (url: string) => {
