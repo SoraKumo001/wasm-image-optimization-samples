@@ -1,12 +1,10 @@
 {
+  "compilerOptions": {
+    "jsx": "react-jsx"
+  },
   "deploy": {
-    "project": "ce9d64af-4717-4151-a93d-ff42fc49d0d8",
-    "exclude": [
-      "**/node_modules"
-    ],
-    "include": [
-      "./src"
-    ],
+    "app": "deno-image",
+    "org": "",
     "entrypoint": "./src/index.ts"
   },
   "nodeModulesDir": "auto"

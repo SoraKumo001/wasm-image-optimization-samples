@@ -1,25 +1,7 @@
-import initYoga from "yoga-wasm-web";
-import satori, { init } from "satori";
-import { optimizeImage } from "wasm-image-optimization";
-import type { JSX } from "react/jsx-runtime";
-
-const importModule = (name: string) => {
-  return fetch(new URL(`../../node_modules/${name}`, import.meta.url))
-    .then((r) => r.arrayBuffer())
-    .catch(() =>
-      fetch(new URL(`../node_modules/${name}`, import.meta.url)).then((r) =>
-        r.arrayBuffer()
-      )
-    );
-};
-
-let isInitialized = false;
-const initializeSatori = async () => {
-  if (isInitialized) return;
-  isInitialized = true;
-  const yogaWasm = await importModule("yoga-wasm-web/dist/yoga.wasm");
-  init(await initYoga(yogaWasm));
-};
+// deno-lint-ignore-file no-unversioned-import no-import-prefix
+import satori from "npm:satori";
+import { optimizeImage } from "npm:wasm-image-optimization";
+import type { JSX } from "npm:react/jsx-runtime";
 
 type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 type FontStyle = "normal" | "italic";
@@ -32,42 +14,48 @@ type FontSrc = {
 };
 type Font = Omit<FontSrc, "data"> & { data: ArrayBuffer };
 
-const downloadFont = async (fontName: string) => {
+const downloadFont = async (name: string, weight: Weight) => {
   return await fetch(
-    `https://fonts.googleapis.com/css2?family=${encodeURI(fontName)}`
+    `https://fonts.googleapis.com/css2?family=${encodeURI(name)}:wght@${weight}`,
   )
     .then((res) => res.text())
     .then(
       (css) =>
-        css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)?.[1]
+        css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)?.[1],
     )
     .then((url) => {
       return url !== undefined
         ? fetch(url).then((v) =>
-            v.status === 200 ? v.arrayBuffer() : undefined
+            v.status === 200 ? v.arrayBuffer() : undefined,
           )
         : undefined;
     });
 };
 
-const getFonts = async (fontList: string[], cache: Cache): Promise<Font[]> => {
+const getFonts = async (
+  fontList: (string | [string, Weight])[],
+  cache?: Cache,
+): Promise<Font[]> => {
   const fonts: Font[] = [];
-  for (const fontName of fontList) {
-    const cacheKey = `http://font/${encodeURI(fontName)}`;
+  for (const font of fontList) {
+    const [fontName, weight] = Array.isArray(font)
+      ? font
+      : [font, 400 as Weight];
+    const cacheKey = `http://font/${encodeURI(fontName)}-`;
 
-    const response = await cache.match(cacheKey);
+    const response = await cache?.match(cacheKey);
     if (response) {
       fonts.push({
         name: fontName,
         data: await response.arrayBuffer(),
-        weight: 400,
+        weight,
         style: "normal",
       });
     } else {
-      const data = await downloadFont(fontName);
+      const data = await downloadFont(fontName, weight);
       if (data) {
-        cache.put(cacheKey, new Response(data));
-        fonts.push({ name: fontName, data, weight: 400, style: "normal" });
+        cache?.put(cacheKey, new Response(data));
+        fonts.push({ name: fontName, data, weight, style: "normal" });
       }
     }
   }
@@ -78,7 +66,7 @@ const createLoadAdditionalAsset = ({
   cache,
   emojis,
 }: {
-  cache: Cache;
+  cache?: Cache;
   emojis: {
     url: string;
     upper?: boolean;
@@ -90,11 +78,11 @@ const createLoadAdditionalAsset = ({
         upper === false ? code.toLocaleLowerCase() : code.toUpperCase()
       }.svg`;
 
-      let response = await cache.match(emojiURL);
+      let response = await cache?.match(emojiURL);
       if (!response) {
         response = await fetch(emojiURL);
         if (response.status === 200) {
-          await cache.put(emojiURL, response.clone());
+          await cache?.put(emojiURL, response.clone());
         }
       }
       if (response.status === 200) {
@@ -136,8 +124,8 @@ export const createOGP = async (
     height,
     scale = 1,
   }: {
-    cache: Cache;
-    fonts: string[];
+    cache?: Cache;
+    fonts: (string | [string, Weight])[];
     emojis?: {
       url: string;
       upper?: boolean;
@@ -145,9 +133,8 @@ export const createOGP = async (
     width: number;
     height?: number;
     scale?: number;
-  }
+  },
 ) => {
-  await initializeSatori();
   const fontList = await getFonts(fonts, cache);
   const svg = await satori(element, {
     width,

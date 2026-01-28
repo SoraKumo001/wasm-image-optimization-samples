@@ -23,14 +23,14 @@ Deno.serve(async (request) => {
   const url = new URL(request.url);
   const params = url.searchParams;
   const type = ["avif", "webp", "png", "jpeg"].find(
-    (v) => v === params.get("type")
+    (v) => v === params.get("type"),
   ) as "avif" | "webp" | "png" | "jpeg" | undefined;
   const accept = request.headers.get("accept");
   const isAvif = isType(accept, "avif");
   const isWebp = isType(accept, "webp");
 
   const cache = await caches.open(
-    `image-${isAvif ? "-avif" : ""}${isWebp ? "-webp" : ""}`
+    `image-${isAvif ? "-avif" : ""}${isWebp ? "-webp" : ""}`,
   );
 
   const cached = await cache.match(request);
@@ -56,7 +56,7 @@ Deno.serve(async (request) => {
     .then(async (res) =>
       res.ok
         ? ([await res.arrayBuffer(), res.headers.get("content-type")] as const)
-        : []
+        : [],
     )
     .catch(() => []);
 
@@ -80,10 +80,10 @@ Deno.serve(async (request) => {
     (isAvif
       ? "avif"
       : isWebp
-      ? "webp"
-      : contentType === "image/jpeg"
-      ? "jpeg"
-      : "png");
+        ? "webp"
+        : contentType === "image/jpeg"
+          ? "jpeg"
+          : "png");
 
   const image = await optimizeImage({
     image: srcImage,

@@ -1,4 +1,25 @@
+/** @jsxImportSource npm:react */
+// deno-lint-ignore-file no-unversioned-import no-import-prefix
 import { createOGP } from "./createOGP.ts";
+import { optimizeImage } from "npm:wasm-image-optimization";
+
+const convertImage = async (url: string | null) => {
+  const response = url ? await fetch(url) : undefined;
+  if (response) {
+    const contentType = response.headers.get("Content-Type");
+    const imageBuffer = await response.arrayBuffer();
+    if (contentType?.startsWith("image/")) {
+      if (["image/png", "image/jpeg"].includes(contentType)) {
+        return [contentType, imageBuffer as ArrayBuffer] as const;
+      }
+      const image = await optimizeImage({ image: imageBuffer, format: "png" });
+      if (image) {
+        return ["image/png", image] as const;
+      }
+    }
+  }
+  return [];
+};
 
 Deno.serve(async (request) => {
   const url = new URL(request.url);
@@ -9,12 +30,19 @@ Deno.serve(async (request) => {
   const name = url.searchParams.get("name") ?? "Name";
   const title = url.searchParams.get("title") ?? "Title";
   const image = url.searchParams.get("image");
+
+  const isDev =
+    Deno.env.get("DENO_ENV") === "development" || url.hostname === "localhost";
   const cache = await caches.open("ogp");
   const cacheKey = new Request(url.toString());
-  const cachedResponse = await cache.match(cacheKey);
-  if (cachedResponse) {
-    return cachedResponse;
+
+  if (!isDev) {
+    const cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) return cachedResponse;
   }
+
+  const [imageType, imageBuffer] = await convertImage(image);
+
   const ogpNode = (
     <div
       style={{
@@ -41,40 +69,59 @@ Deno.serve(async (request) => {
         <div
           style={{
             display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
             flex: 1,
+            position: "relative",
           }}
         >
           {image && (
             <img
               style={{
                 borderRadius: "100%",
-                padding: "8px",
-                marginRight: "16px",
-                position: "absolute",
+                padding: "24px",
                 opacity: 0.4,
               }}
               width={480}
               height={480}
-              src={image}
+              src={
+                imageBuffer
+                  ? `data:${imageType};base64,${btoa(
+                      Array.from(new Uint8Array(imageBuffer))
+                        .map((v) => String.fromCharCode(v))
+                        .join(""),
+                    )}`
+                  : undefined
+              }
               alt=""
             />
           )}
-          <h1
+          <div
             style={{
-              display: "block",
-              flex: 1,
-              fontSize: 72,
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              padding: "0 42px",
-              wordBreak: "break-all",
-              textOverflow: "ellipsis",
-              lineClamp: 4,
-              lineHeight: "64px",
+              justifyContent: "flex-start",
             }}
           >
-            {title}
-          </h1>
+            <h1
+              style={{
+                fontSize: 64,
+                fontWeight: 700,
+                padding: "0 42px",
+                wordBreak: "break-all",
+                lineClamp: 4,
+                lineHeight: "90px",
+                color: "#222",
+              }}
+            >
+              {title}
+            </h1>
+          </div>
         </div>
         <div
           style={{
@@ -91,16 +138,17 @@ Deno.serve(async (request) => {
     </div>
   );
   const png = await createOGP(ogpNode, {
-    cache,
+    cache: isDev ? undefined : cache,
     scale: 0.7,
     width: 1200,
     height: 630,
     fonts: [
+      ["LINE Seed JP", 700],
       "Noto Sans",
       "Noto Sans Math",
       "Noto Sans Symbols",
       // 'Noto Sans Symbols 2',
-      "Noto Sans JP",
+      // "Noto Sans JP",
       // 'Noto Sans KR',
       // 'Noto Sans SC',
       // 'Noto Sans TC',
@@ -127,10 +175,14 @@ Deno.serve(async (request) => {
   const response = new Response(png, {
     headers: {
       "Content-Type": "image/png",
-      "Cache-Control": "public, max-age=31536000, immutable",
+      "Cache-Control": isDev
+        ? "no-cache"
+        : "public, max-age=31536000, immutable",
       date: new Date().toUTCString(),
     },
   });
-  await cache.put(cacheKey, response.clone());
+  if (!isDev) {
+    await cache.put(cacheKey, response.clone());
+  }
   return response;
 });
