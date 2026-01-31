@@ -117,6 +117,8 @@ Deno.serve(async (request) => {
                 lineClamp: 4,
                 lineHeight: "90px",
                 color: "#222",
+                textShadow:
+                  "2px 2px 0px #eee, -2px -2px 0px #eee, 2px -2px 0px #eee, -2px 2px 0px #eee",
               }}
             >
               {title}

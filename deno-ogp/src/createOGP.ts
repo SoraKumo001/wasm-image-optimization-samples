@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-unversioned-import no-import-prefix
 import satori from "npm:satori";
-import { optimizeImage } from "npm:wasm-image-optimization";
 import type { JSX } from "npm:react/jsx-runtime";
+import { Resvg } from "npm:@resvg/resvg-js";
 
 type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 type FontStyle = "normal" | "italic";
@@ -144,10 +144,12 @@ export const createOGP = async (
       ? createLoadAdditionalAsset({ cache, emojis })
       : undefined,
   });
-  return await optimizeImage({
-    image: svg as never,
-    width: width * scale,
-    height: height ? height * scale : undefined,
-    format: "png",
+  const resvg = new Resvg(svg, {
+    fitTo: {
+      mode: "width",
+      value: width * scale,
+    },
   });
+  const pngData = resvg.render();
+  return pngData.asPng() as unknown as ArrayBuffer;
 };
