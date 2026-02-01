@@ -12,10 +12,9 @@
   },
   "repository": "https://github.com/SoraKumo001/deno-ogp-image",
   "dependencies": {
-    "@resvg/resvg-js": "^2.6.2",
     "react": "^19.2.4",
     "satori": "^0.19.1",
-    "wasm-image-optimization": "^1.4.4"
+    "wasm-image-optimization": "^1.4.5"
   },
   "devDependencies": {
     "@types/react": "^19.2.10"

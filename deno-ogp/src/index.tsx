@@ -118,7 +118,7 @@ Deno.serve(async (request) => {
                 lineHeight: "90px",
                 color: "#222",
                 textShadow:
-                  "2px 2px 0px #eee, -2px -2px 0px #eee, 2px -2px 0px #eee, -2px 2px 0px #eee",
+                  "2px 2px 0px #bbb, -2px -2px 0px #bbb, 2px -2px 0px #bbb, -2px 2px 0px #bbb",
               }}
             >
               {title}
