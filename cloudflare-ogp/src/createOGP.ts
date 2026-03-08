@@ -1,12 +1,11 @@
-import satori, { init } from 'satori/wasm';
-import initYoga from 'yoga-wasm-web';
-import yogaWasm from 'yoga-wasm-web/dist/yoga.wasm';
+import satori, { init } from 'satori/standalone';
+import yogaWasm from 'satori/yoga.wasm';
 import type { JSX } from 'react';
 import { optimizeImage } from 'wasm-image-optimization';
 
-init(await initYoga(yogaWasm));
+await init(yogaWasm);
 
-const cache = await caches.open('cloudflare-ogp2');
+const cache = await caches.open('cloudflare-ogp3');
 
 type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 type FontStyle = 'normal' | 'italic';
@@ -111,7 +110,7 @@ export const createOGP = async (
 		width: number;
 		height?: number;
 		scale?: number;
-	}
+	},
 ) => {
 	const fontList = await getFonts(fonts, ctx);
 	const svg = await satori(element, {
@@ -120,5 +119,10 @@ export const createOGP = async (
 		fonts: fontList,
 		loadAdditionalAsset: emojis ? createLoadAdditionalAsset({ ctx, emojis }) : undefined,
 	});
-	return await optimizeImage({ image: svg as never, width: width * scale, height: height ? height * scale : undefined, format: 'png' });
+	return await optimizeImage({
+		image: new TextEncoder().encode(svg),
+		width: width * scale,
+		height: height ? height * scale : undefined,
+		format: 'png',
+	}).then((v) => v.data);
 };

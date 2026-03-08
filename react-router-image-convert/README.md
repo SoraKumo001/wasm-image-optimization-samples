@@ -42,11 +42,11 @@ export default defineConfig(({ isSsrBuild }) => ({
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
 import {
   type OptimizeResult,
-  optimizeImageExt,
+  optimizeImage,
   setLimit,
   waitReady,
   launchWorker,
-} from "wasm-image-optimization/web-worker";
+} from "wasm-image-optimization/workers";
 
 setLimit(8); // Web Worker limit
 launchWorker(); // Prepare Worker in advance.
@@ -54,7 +54,7 @@ launchWorker(); // Prepare Worker in advance.
 const classNames = (...classNames: (string | undefined | false)[]) =>
   classNames.reduce(
     (a, b, index) => a + (b ? (index ? " " : "") + b : ""),
-    ""
+    "",
   ) as string | undefined;
 
 const Time = () => {
@@ -79,7 +79,7 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
       <div
         className={classNames(
           "w-64 h-32 border-dashed border flex justify-center items-center cursor-pointer select-none m-2 rounded-4xl p-4",
-          focus && "outline outline-blue-400"
+          focus && "outline outline-blue-400",
         )}
         onDragOver={(e) => {
           e.preventDefault();
@@ -132,7 +132,7 @@ const AsyncImage: FC<{
   filter: boolean;
   size: [number, number];
   onFinished?: ({}: {
-    image: NonNullable<Awaited<ReturnType<typeof optimizeImageExt>>>;
+    image: NonNullable<Awaited<OptimizeResult>>;
     format: (typeof formats)[number];
     quality: number;
     speed: number;
@@ -151,12 +151,11 @@ const AsyncImage: FC<{
       await waitReady();
       const buffer = await file.arrayBuffer();
       const t = performance.now();
-      const image = await optimizeImageExt({
+      const image = await optimizeImage({
         image: buffer,
         format,
         quality,
         speed,
-        filter,
         width: size[0] || undefined,
         height: size[1] || undefined,
       });
@@ -175,9 +174,9 @@ const AsyncImage: FC<{
       URL.createObjectURL(
         new Blob([image.data as BufferSource], {
           type: format === "none" ? file.type : `image/${format}`,
-        })
+        }),
       ),
-    [image]
+    [image],
   );
   const filename =
     format === "none" ? file.name : file.name.replace(/\.\w+$/, `.${format}`);
@@ -358,7 +357,7 @@ const Page = () => {
                         }x${v.image.originalHeight}) (${v.image.width}x${
                           v.image.height
                         }) Speed:${speed} Quality:${quality} ${Math.ceil(
-                          v.image.data.length / 1024
+                          v.image.data.length / 1024,
                         )
                           .toLocaleString()
                           .padStart(8)}KB ${v.time
@@ -366,7 +365,7 @@ const Page = () => {
                             minimumFractionDigits: 1,
                           })
                           .padStart(8)}ms`,
-                      ].sort((a, b) => (a < b ? -1 : 1))
+                      ].sort((a, b) => (a < b ? -1 : 1)),
                     );
                   }}
                 />

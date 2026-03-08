@@ -1,0 +1,37 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      wasm-image-optimization:
+        specifier: 2.0.2
+        version: 2.0.2
+
+packages:
+
+  commander@14.0.3:
+    resolution: {integrity: sha512-H+y0Jo/T1RZ9qPP4Eh1pkcQcLRglraJaSLoyOtHxu6AapkjWVCy2Sit1QQ4x3Dng8qDlSsZEet7g5Pq06MvTgw==}
+    engines: {node: '>=20'}
+
+  wasm-image-optimization@2.0.2:
+    resolution: {integrity: sha512-1odvQY7BA3tG3/LcOb7qPHnBnzdDU0gbP3iXqvTozDOx/YOB4Rk5gumD9GwkXiH41ApqNvaktO1Hj5IcRCqm7g==}
+    hasBin: true
+
+  worker-lib@2.2.0:
+    resolution: {integrity: sha512-femfnzMFgw9Uvj9LUJ1bkIi/3PJavpZNCgq9OGsrcCzxmRp2+RGkq1d+kjsvOxC8JKIAI7K4+laeq8cMWT2AYQ==}
+
+snapshots:
+
+  commander@14.0.3: {}
+
+  wasm-image-optimization@2.0.2:
+    dependencies:
+      commander: 14.0.3
+      worker-lib: 2.2.0
+
+  worker-lib@2.2.0: {}

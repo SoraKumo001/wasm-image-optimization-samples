@@ -13,9 +13,9 @@ const convertImage = async (url: string | null) => {
 			if (['image/png', 'image/jpeg'].includes(contentType)) {
 				return [contentType, imageBuffer as ArrayBuffer] as const;
 			}
-			const image = await optimizeImage({ image: imageBuffer, format: 'png' });
-			if (image) {
-				return ['image/png', image] as const;
+			const { data } = await optimizeImage({ image: imageBuffer, format: 'png' });
+			if (data) {
+				return ['image/png', data] as const;
 			}
 		}
 	}
@@ -84,8 +84,8 @@ const outputOGP = async (request: Request, _env: object, ctx: ExecutionContext):
 									? `data:${imageType};base64,${btoa(
 											Array.from(new Uint8Array(imageBuffer))
 												.map((v) => String.fromCharCode(v))
-												.join('')
-									  )}`
+												.join(''),
+										)}`
 									: undefined
 							}
 							alt=""

@@ -18,7 +18,7 @@ const main = async () => {
   for (const file of files) {
     await fs.readFile(`./images/${file}`).then(async (image) => {
       console.log(
-        `${file} ${Math.ceil(image.length / 1024).toLocaleString()}KB`
+        `${file} ${Math.ceil(image.length / 1024).toLocaleString()}KB`,
       );
       for (const format of formats) {
         const label = `[${file}] -> [${format}]`;
@@ -28,14 +28,14 @@ const main = async () => {
           quality: 80,
           format,
           width: 512,
-        }).then((encoded) => {
-          if (encoded) {
+        }).then(({ data }) => {
+          if (data) {
             console.timeLog(
               label,
-              `${Math.ceil(encoded.length / 1024).toLocaleString()}KB`
+              `${Math.ceil(data.length / 1024).toLocaleString()}KB`,
             );
             const fileName = file.split(".")[0];
-            fs.writeFile(`image_output/${fileName}.${format}`, encoded);
+            fs.writeFile(`image_output/${fileName}.${format}`, data);
           }
         });
       }
@@ -87,7 +87,8 @@ import {
   optimizeImage,
   close,
   setLimit,
-} from "wasm-image-optimization/node-worker";
+  waitReady,
+} from "wasm-image-optimization/workers";
 
 const formats = ["webp", "jpeg", "png", "avif"] as const;
 
@@ -101,9 +102,10 @@ const main = async () => {
   const p = files.map(async (file) => {
     return fs.readFile(`./images/${file}`).then((image) => {
       console.log(
-        `${file} ${Math.floor(image.length / 1024).toLocaleString()}KB`
+        `${file} ${Math.ceil(image.length / 1024).toLocaleString()}KB`,
       );
-      const p = formats.map((format) => {
+      const p = formats.map(async (format) => {
+        await waitReady();
         const label = `[${file}] -> [${format}]`;
         console.time(label);
         return optimizeImage({
@@ -111,14 +113,14 @@ const main = async () => {
           quality: 100,
           format,
           width: 512,
-        }).then((encoded) => {
-          if (encoded) {
+        }).then(({ data }) => {
+          if (data) {
             console.timeLog(
               label,
-              `${Math.floor(encoded.length / 1024).toLocaleString()}KB`
+              `${Math.ceil(data.length / 1024).toLocaleString()}KB`,
             );
             const fileName = file.split(".")[0];
-            fs.writeFile(`image_output/${fileName}.${format}`, encoded);
+            fs.writeFile(`image_output/${fileName}.${format}`, data);
           }
         });
       });

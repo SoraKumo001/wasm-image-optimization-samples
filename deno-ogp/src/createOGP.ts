@@ -149,5 +149,5 @@ export const createOGP = async (
     width: width * scale,
     height: height ? height * scale : undefined,
     format: "png",
-  });
+  }).then((v) => v.data);
 };

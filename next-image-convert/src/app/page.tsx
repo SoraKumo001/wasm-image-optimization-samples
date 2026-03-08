@@ -1,20 +1,17 @@
 "use client";
 import { useEffect, useMemo, useRef, useState, type FC } from "react";
 import {
-  type OptimizeResult,
-  optimizeImageExt,
+  optimizeImage,
   setLimit,
-  waitReady,
   launchWorker,
-} from "wasm-image-optimization/web-worker";
-
-setLimit(8); // Web Worker limit
-launchWorker(); // Prepare Worker in advance.
+  waitReady,
+  type OptimizeResult,
+} from "wasm-image-optimization/workers";
 
 const classNames = (...classNames: (string | undefined | false)[]) =>
   classNames.reduce(
     (a, b, index) => a + (b ? (index ? " " : "") + b : ""),
-    ""
+    "",
   ) as string | undefined;
 
 const Time = () => {
@@ -39,7 +36,7 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
       <div
         className={classNames(
           "w-64 h-32 border-dashed border flex justify-center items-center cursor-pointer select-none m-2 rounded-4xl p-4",
-          focus && "outline outline-blue-400"
+          focus && "outline outline-blue-400",
         )}
         onDragOver={(e) => {
           e.preventDefault();
@@ -84,21 +81,35 @@ const ImageInput: FC<{ onFiles: (files: File[]) => void }> = ({ onFiles }) => {
 };
 
 const formats = ["none", "avif", "webp", "jpeg", "png"] as const;
+const fits = ["contain", "cover", "fill"] as const;
 const AsyncImage: FC<{
   file: File;
   format: (typeof formats)[number];
+  fit: (typeof fits)[number];
   quality: number;
   speed: number;
   filter: boolean;
+  animation: boolean;
   size: [number, number];
   onFinished?: ({}: {
-    image: NonNullable<Awaited<ReturnType<typeof optimizeImageExt>>>;
+    image: NonNullable<Awaited<OptimizeResult>>;
     format: (typeof formats)[number];
     quality: number;
     speed: number;
+    animation: boolean;
     time: number;
   }) => void;
-}> = ({ file, format, quality, size, speed, filter, onFinished }) => {
+}> = ({
+  file,
+  format,
+  fit,
+  quality,
+  size,
+  speed,
+  filter,
+  animation,
+  onFinished,
+}) => {
   const [time, setTime] = useState<number>();
   const [image, setImage] = useState<OptimizeResult | null | undefined>(null);
   const property = useRef<{ isInit?: boolean }>({}).current;
@@ -111,12 +122,13 @@ const AsyncImage: FC<{
       await waitReady();
       const buffer = await file.arrayBuffer();
       const t = performance.now();
-      const image = await optimizeImageExt({
+      const image = await optimizeImage({
         image: buffer,
         format,
+        fit,
         quality,
         speed,
-        filter,
+        animation,
         width: size[0] || undefined,
         height: size[1] || undefined,
       });
@@ -124,7 +136,7 @@ const AsyncImage: FC<{
       setTime(time);
       setImage(image);
       if (image) {
-        onFinished?.({ image, format, speed, quality, time });
+        onFinished?.({ image, format, speed, quality, animation, time });
       }
     };
     convert();
@@ -135,12 +147,14 @@ const AsyncImage: FC<{
       URL.createObjectURL(
         new Blob([image.data as BufferSource], {
           type: format === "none" ? file.type : `image/${format}`,
-        })
+        }),
       ),
-    [image]
+    [image],
   );
   const filename =
-    format === "none" ? file.name : file.name.replace(/\.\w+$/, `.${format}`);
+    !image || format === "none"
+      ? file.name
+      : file.name.replace(/\.\w+$/, `.${image.format}`);
   return (
     <div className="border border-gray-300 rounded-4 overflow-hidden relative w-64 h-64 grid">
       {image === undefined && <div>Error</div>}
@@ -175,10 +189,12 @@ const Page = () => {
   const [quality, setQuality] = useState(80);
   const [speed, setSpeed] = useState(6);
   const [size, setSize] = useState<[number, number]>([0, 0]);
+  const [fit, setFit] = useState<(typeof fits)[number]>("contain");
   const [limitWorker, setLimitWorker] = useState(10);
   const [formatList, setFormatList] =
     useState<ReadonlyArray<(typeof formats)[number]>>(formats);
   const [filter, setFilter] = useState(true);
+  const [animation, setAnimation] = useState(true);
   const [logs, setLogs] = useState<string[]>([]);
   const logText = useMemo(() => logs.join("\n"), [logs]);
   return (
@@ -262,7 +278,6 @@ const Page = () => {
           onChange={(e) => {
             const limit = Math.max(1, Number(e.target.value));
             setLimit(limit);
-            setLimitWorker(limit);
             launchWorker();
           }}
         />
@@ -278,6 +293,31 @@ const Page = () => {
         </div>
         Resize filter
       </label>
+      <label className="flex gap-2 items-center">
+        <div className="border border-gray-300 rounded-4 p-1 w-16">
+          <input
+            type="checkbox"
+            checked={animation}
+            onChange={(e) => setAnimation(e.currentTarget.checked)}
+          />
+        </div>
+        Animation
+      </label>
+      <div className="flex gap-2 items-center">
+        Fit:
+        {fits.map((f) => (
+          <label key={f} className="flex gap-1 items-center">
+            <input
+              type="radio"
+              name="fit"
+              value={f}
+              checked={fit === f}
+              onChange={(e) => setFit(e.currentTarget.value as any)}
+            />
+            {f}
+          </label>
+        ))}
+      </div>
       <div className="flex gap-2">
         {formats.map((format) => (
           <label key={format} className="flex gap-1 ">
@@ -305,10 +345,12 @@ const Page = () => {
                   key={format}
                   file={file}
                   format={format}
+                  fit={fit}
                   quality={quality}
                   speed={speed}
                   size={size}
                   filter={filter}
+                  animation={animation}
                   onFinished={(v) => {
                     setLogs((l) =>
                       [
@@ -317,8 +359,8 @@ const Page = () => {
                           v.image.originalWidth
                         }x${v.image.originalHeight}) (${v.image.width}x${
                           v.image.height
-                        }) Speed:${speed} Quality:${quality} ${Math.ceil(
-                          v.image.data.length / 1024
+                        }) Speed:${speed} Quality:${quality} Animation:${animation} ${Math.ceil(
+                          v.image.data.length / 1024,
                         )
                           .toLocaleString()
                           .padStart(8)}KB ${v.time
@@ -326,7 +368,7 @@ const Page = () => {
                             minimumFractionDigits: 1,
                           })
                           .padStart(8)}ms`,
-                      ].sort((a, b) => (a < b ? -1 : 1))
+                      ].sort((a, b) => (a < b ? -1 : 1)),
                     );
                   }}
                 />

@@ -67,14 +67,14 @@ const handleRequest = async (request: Request, _env: object, ctx: ExecutionConte
 	}
 
 	const format = type ?? (isAvif ? 'avif' : isWebp ? 'webp' : contentType === 'image/jpeg' ? 'jpeg' : 'png');
-	const image = await optimizeImage({
+	const { data } = await optimizeImage({
 		image: srcImage,
 		width: width ? Number(width) : undefined,
 		quality: quality ? Number(quality) : undefined,
 		format,
 		speed: 9,
 	});
-	const response = new Response(image, {
+	const response = new Response(data, {
 		headers: {
 			'Content-Type': `image/${format}`,
 			'Cache-Control': 'public, max-age=31536000, immutable',

@@ -4,7 +4,7 @@ import {
   close,
   setLimit,
   waitReady,
-} from "wasm-image-optimization/node-worker";
+} from "wasm-image-optimization/workers";
 
 const formats = ["webp", "jpeg", "png", "avif"] as const;
 
@@ -18,7 +18,7 @@ const main = async () => {
   const p = files.map(async (file) => {
     return fs.readFile(`./images/${file}`).then((image) => {
       console.log(
-        `${file} ${Math.ceil(image.length / 1024).toLocaleString()}KB`
+        `${file} ${Math.ceil(image.length / 1024).toLocaleString()}KB`,
       );
       const p = formats.map(async (format) => {
         await waitReady();
@@ -29,14 +29,14 @@ const main = async () => {
           quality: 100,
           format,
           width: 512,
-        }).then((encoded) => {
-          if (encoded) {
+        }).then(({ data }) => {
+          if (data) {
             console.timeLog(
               label,
-              `${Math.ceil(encoded.length / 1024).toLocaleString()}KB`
+              `${Math.ceil(data.length / 1024).toLocaleString()}KB`,
             );
             const fileName = file.split(".")[0];
-            fs.writeFile(`image_output/${fileName}.${format}`, encoded);
+            fs.writeFile(`image_output/${fileName}.${format}`, data);
           }
         });
       });

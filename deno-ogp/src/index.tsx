@@ -12,7 +12,10 @@ const convertImage = async (url: string | null) => {
       if (["image/png", "image/jpeg"].includes(contentType)) {
         return [contentType, imageBuffer as ArrayBuffer] as const;
       }
-      const image = await optimizeImage({ image: imageBuffer, format: "png" });
+      const image = await optimizeImage({
+        image: imageBuffer,
+        format: "png",
+      }).then((v) => v.data);
       if (image) {
         return ["image/png", image] as const;
       }
@@ -174,7 +177,7 @@ Deno.serve(async (request) => {
       },
     ],
   });
-  const response = new Response(png, {
+  const response = new Response(png as BodyInit, {
     headers: {
       "Content-Type": "image/png",
       "Cache-Control": isDev

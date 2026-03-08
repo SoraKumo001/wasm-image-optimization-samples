@@ -23,7 +23,7 @@ const isType = (accept: string | null, type: string) => {
 	);
 };
 
-const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext): Promise<Response> => {
+const handleRequest = async (request: Request, _env: object, ctx: ExecutionContext): Promise<Response> => {
 	const url = new URL(request.url);
 	const params = url.searchParams;
 	const type = ['avif', 'webp', 'png', 'jpeg'].find((v) => v === params.get('type')) as 'avif' | 'webp' | 'png' | 'jpeg' | undefined;
@@ -34,7 +34,7 @@ const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext):
 	const cache = await caches.open(`img-${isAvif ? '-avif' : ''}${isWebp ? '-webp' : ''}`);
 
 	const cached = await cache.match(request);
-	if (cached) {
+	if (cached && cached.ok) {
 		return cached;
 	}
 
@@ -72,13 +72,14 @@ const handleRequest = async (request: Request, _env: {}, ctx: ExecutionContext):
 	}
 
 	const format = type ?? (isAvif ? 'avif' : isWebp ? 'webp' : contentType === 'image/jpeg' ? 'jpeg' : 'png');
-	const image = await optimizeImage({
+	const { data } = await optimizeImage({
 		image: srcImage,
-		width: width ? parseInt(width) : undefined,
-		quality: quality ? parseInt(quality) : undefined,
+		width: width ? Number(width) : undefined,
+		quality: quality ? Number(quality) : undefined,
 		format,
+		speed: 9,
 	});
-	const response = new Response(image, {
+	const response = new Response(data, {
 		headers: {
 			'Content-Type': `image/${format}`,
 			'Cache-Control': 'public, max-age=31536000, immutable',

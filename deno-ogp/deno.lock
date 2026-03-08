@@ -1,10 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "npm:@types/react@^19.2.10": "19.2.10",
-    "npm:react@^19.2.4": "19.2.4",
-    "npm:satori@~0.19.1": "0.19.1",
-    "npm:wasm-image-optimization@^1.4.5": "1.4.5"
+    "npm:react@^19.2.4": "19.2.4"
   },
   "npm": {
     "@shuding/opentype.js@1.4.0-beta.0": {
@@ -138,10 +135,10 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
-        "npm:@types/react@^19.2.10",
+        "npm:@types/react@^19.2.14",
         "npm:react@^19.2.4",
-        "npm:satori@~0.19.1",
-        "npm:wasm-image-optimization@^1.4.5"
+        "npm:satori@~0.19.3",
+        "npm:wasm-image-optimization@^2.0.2"
       ]
     }
   }
